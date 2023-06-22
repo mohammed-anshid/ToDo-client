@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import DashBoard from './pages/DashBoard';
 import Signup from './pages/Signup';
@@ -15,6 +15,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route path='/' element={Navigate('/signup')} />
           <Route path='/signup' element={ <ProtectRoute><Signup/></ProtectRoute> }/>
           <Route path='/signin' element={ <ProtectRoute><Signin/></ProtectRoute>  }/>
           <Route path='/dashboard' element={ <PublicAuthRote><DashBoard/></PublicAuthRote>  }/>
