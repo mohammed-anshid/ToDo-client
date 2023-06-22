@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Athentication } from '../services/userAuth/userAuth';
 
 function PublicAuthRote(props) {
-    
+
   const navigate = useNavigate()
 
   useEffect(() =>{
@@ -11,15 +11,15 @@ function PublicAuthRote(props) {
         const response = await Athentication()
         if (!response.status) {
             localStorage.clear()
-            navigate('/login')
+            navigate('/signin')
         }
     })()
   },[])
 
-  if (!localStorage.getItem("token")) {
-    return  navigate('/login')
+  if (!localStorage.getItem("userToken")) {
+    return  navigate('/signin')
   }
-  if (localStorage.getItem("token")) {
+  if (localStorage.getItem("userToken")) {
     return props.children;
   }
 }

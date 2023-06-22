@@ -5,7 +5,7 @@ function ProtectRoute(props) {
     if(!localStorage.getItem("userToken")) {
         return props.children;
     } else if (localStorage.getItem("userToken")) {
-        return <Navigate to="/" />;
+        return <Navigate to="/dashboard" />;
     }
 }
 
