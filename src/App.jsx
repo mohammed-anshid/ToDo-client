@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route,  } from 'react-router-dom';
 import './App.css';
 import DashBoard from './pages/DashBoard';
 import Signup from './pages/Signup';
@@ -9,14 +9,16 @@ import EditProfile from './pages/EditProfile';
 import Security from './pages/Security';
 import ProtectRoute from './Auth/ProtectRoute';
 import PublicAuthRote from './Auth/PublicAuthRote';
+import Redirection from './components/Redirection';
+
 
 function App() {
-  const navigate = useNavigate()
+
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={navigate('/signup')} />
+          <Route path='/' element={<Redirection/>} />
           <Route path='/signup' element={ <ProtectRoute><Signup/></ProtectRoute> }/>
           <Route path='/signin' element={ <ProtectRoute><Signin/></ProtectRoute>  }/>
           <Route path='/dashboard' element={ <PublicAuthRote><DashBoard/></PublicAuthRote>  }/>
