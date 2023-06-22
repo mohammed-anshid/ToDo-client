@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React,{ useState } from 'react'
 import Todo from './Todo';
 import { ErrorToast, SuccessToast } from '../utils/toast';
-import { addToDos } from '../services/userApi/userRequests';
+import { addToDos, editTask, removeTask } from '../services/userApi/userRequests';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "react-circular-progressbar/dist/styles.css";
@@ -10,39 +11,74 @@ import { CircularProgressbar } from "react-circular-progressbar";
 function Tasks({tasks,state,setState}) {
 
   const [collapse, setCollapse] = useState(false); 
+  const [dropdown, setDropdown] = useState(false);
+  const [modal, setModal] = useState(false); 
   const [formData, setFormData] = useState({});
+  const [task, setTask] = useState(tasks?.title);
   const [checked, setChecked] = useState(tasks?.todos)
-
+  
+  // handle form Data //
   const handleChange = (event) => {
     setFormData({ [event.target.name]: event.target.value } );
   };  
 
+  // handle form submit //
   const handleSubmit = async(event) => {
     try {
-        event.preventDefault();
-
-        if(formData.todo.trim() !== '') { 
-          const response = await addToDos(formData,tasks._id)
-          if(response.status === true){
-            SuccessToast(response.message)
-            setState(!state)
-          }else{
-            ErrorToast(response.message)
-          }
+      event.preventDefault();
+      if(formData.todo.trim() !== '') { 
+        const response = await addToDos(formData,tasks._id)
+        if(response.status === true){
+          SuccessToast(response.message)
+          setState(!state)
         }else{
-          ErrorToast('Enter a valid input')
+          ErrorToast(response.message)
         }
+      }else{
+        ErrorToast('Enter a valid input')
+      }
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
 
+  // handle Edit Task //
+  const editTaskHandle = async () => {
+    try {
+      const response = await editTask(tasks?._id,task)
+      if(response.status){
+        setState(!state)
+        setModal(!modal)
+        SuccessToast(response.message)
+      }else{
+        ErrorToast(response.message)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // handle delete Task //
+  const removeTaskHandle = async () => {
+    try {
+      const response = await removeTask(tasks?._id)
+      if(response.status){
+        setState(!state)
+        SuccessToast(response.message)
+      }else{
+        ErrorToast(response.message)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // handle Progress Graph values //
   const calculateGraphValue = () => {
     if(checked.length === 0){
-        return 0
+      return 0;
     }
     const checkedCount = checked.filter((checkbox) => checkbox.completed).length;
-    // console.log(checkedCount);
     return (Math.floor((checkedCount / checked.length) * 100))
   };
 
@@ -72,21 +108,20 @@ function Tasks({tasks,state,setState}) {
                   
                   <span className="ml-auto h-5 w-5 shrink-0 rotate-[-180deg] fill-[#336dec] transition-transform duration-200 ease-in-out group-[[data-te-collapse-collapsed]]:rotate-0 group-[[data-te-collapse-collapsed]]:fill-[#212529] motion-reduce:transition-none dark:fill-blue-300 dark:group-[[data-te-collapse-collapsed]]:fill-white">
                     
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
                   </span>
+                  <div class="relative inline-block text-left">
+                    <div>
+                      <button type="button" onClick={()=>setDropdown(!dropdown)} class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
+                      Options
+                      </button>
+                    </div>
+                    {dropdown && <div class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+                        <div class="py-1" role="none">
+                            <a onClick={()=>setModal(!modal)} class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem" tabindex="-1" id="menu-item-0"><strong>Edit</strong></a>
+                            <a onClick={removeTaskHandle} class="text-gray-700 block px-4 py-2 text-sm  hover:bg-gray-100" role="menuitem" tabindex="-1" id="menu-item-1"><strong>Delete</strong></a>
+                        </div>
+                    </div>}
+                  </div>
                 </button>
               </h2>
 
@@ -135,6 +170,56 @@ function Tasks({tasks,state,setState}) {
             </div>
           </div>
         </div>
+        {/*task editing modal */}
+        {modal && (
+        <div
+          class="relative z-10"
+          aria-labelledby="modal-title"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+          <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div class="sm:items-start">
+                    <div>
+                      <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                      <input
+                        type="text"
+                        name="task"
+                        id="task"
+                        onChange={(e)=>setTask(e.target.value)}
+                        value={task}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder=""
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-gray-50 gap-2 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <button
+                    type="button"
+                    onClick={editTaskHandle}
+                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModal(!modal)}
+                    class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

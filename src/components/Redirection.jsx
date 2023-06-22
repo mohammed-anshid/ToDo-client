@@ -1,15 +1,17 @@
 import React from 'react'
+import Header from './LandingPageComponents/Header/Header'
+import Banner from './LandingPageComponents/Banner/Banner'
+import Footer from './LandingPageComponents/Footer/Footer'
 
 
-function Redirection() {
-
-//   const navigate = useNavigate();
-//   useEffect(()=>{
-//     navigate('/signup');
-//   },[])  
+function Redirection() {  
 
   return (
-    <>hello</>
+    <>
+      <Header/>
+      <Banner/>
+      <Footer/>
+    </>
   )
 }
 

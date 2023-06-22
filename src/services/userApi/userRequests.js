@@ -63,12 +63,41 @@ export const addTasks = async (formData) => {
     }
 }
 
+export const editTask = async (taskId,task) => {
+    try {
+        console.log(taskId)
+        const { data } = await userApi.patch(`/edit-task?id=${taskId}&task=${task}`);
+        return data ;
+    } catch (error) {
+        return error ;
+    }
+}
+
+export const removeTask = async (taskId) => {
+    try {
+        console.log('hello')
+        const { data } = await userApi.patch(`/delete-task?id=${taskId}`);
+        return data ;
+    } catch (error) {
+        return error ;
+    }
+}
+
 export const addToDos = async (formData,taskId) => {
     try {
         const { data } = await userApi.post('/todos',{formData,taskId});
         return data;
     } catch (error) {
         return error
+    }
+}
+
+export const removeTodos = async (formData) => {
+    try {
+        const { data } = await userApi.patch('/remove-todo',formData)
+        return data;
+    } catch (error) {
+        return error;
     }
 }
 
