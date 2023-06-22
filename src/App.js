@@ -17,7 +17,7 @@ function App() {
         <Routes>
           <Route path='/signup' element={ <ProtectRoute><Signup/></ProtectRoute> }/>
           <Route path='/signin' element={ <ProtectRoute><Signin/></ProtectRoute>  }/>
-          <Route path='/dashboard' element={<PublicAuthRote><DashBoard/></PublicAuthRote>  }/>
+          <Route path='/dashboard' element={ <PublicAuthRote><DashBoard/></PublicAuthRote>  }/>
           <Route path='/profile' element={ <PublicAuthRote><Profile/></PublicAuthRote> }/>
           <Route path='/profile/:id' element={ <PublicAuthRote><EditProfile/></PublicAuthRote> }/>
           <Route path='/security/:id'  element={ <PublicAuthRote><Security/></PublicAuthRote> }/>
