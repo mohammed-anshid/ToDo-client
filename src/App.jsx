@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import DashBoard from './pages/DashBoard';
 import Signup from './pages/Signup';
@@ -11,11 +11,12 @@ import ProtectRoute from './Auth/ProtectRoute';
 import PublicAuthRote from './Auth/PublicAuthRote';
 
 function App() {
+  const navigate = useNavigate()
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={Navigate('/signup')} />
+          <Route path='/' element={navigate('/signup')} />
           <Route path='/signup' element={ <ProtectRoute><Signup/></ProtectRoute> }/>
           <Route path='/signin' element={ <ProtectRoute><Signin/></ProtectRoute>  }/>
           <Route path='/dashboard' element={ <PublicAuthRote><DashBoard/></PublicAuthRote>  }/>
