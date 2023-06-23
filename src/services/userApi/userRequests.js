@@ -1,5 +1,7 @@
 import { userApi } from "../../utils/api";
 
+
+// ---> signup <--- //
 export const signup = async (formData) => {
     try {
         const { data } = await userApi.post('/signup',formData);
@@ -9,6 +11,7 @@ export const signup = async (formData) => {
     }
 }
 
+// ---> signin <--- //
 export const signin = async (formData) => {
     try {
         const { data } = await userApi.post('/signin',formData);
@@ -18,6 +21,7 @@ export const signin = async (formData) => {
     }
 }
 
+// ---> User Profile <--- //
 export const userProfile = async () => {
     try {
         const { data } = await userApi.get('/profile')
@@ -27,6 +31,7 @@ export const userProfile = async () => {
     }
 }
 
+// ---> Edit Profile <--- //
 export const editProfile = async (formData) => {
     try {
         const { data } = await userApi.patch('/profile',formData);
@@ -36,6 +41,7 @@ export const editProfile = async (formData) => {
     }
 }
 
+// ---> Edit Password <--- //
 export const editPassword = async (formData,userId) => {
     try {
         const { data } = await userApi.patch(`/security?id=${userId}`,formData);
@@ -45,6 +51,7 @@ export const editPassword = async (formData,userId) => {
     }
 }
 
+// ---> Get All Tasks <--- //
 export const getTasks = async () => {
     try {
         const { data } = await userApi.get('/tasks');
@@ -54,6 +61,7 @@ export const getTasks = async () => {
     }
 }
 
+// ---> Add Tasks <--- //
 export const addTasks = async (formData) => {
     try {
         const { data } = await userApi.post('/add',formData);
@@ -63,6 +71,7 @@ export const addTasks = async (formData) => {
     }
 }
 
+// ---> Edit Tasks <--- //
 export const editTask = async (taskId,task) => {
     try {
         console.log(taskId)
@@ -73,6 +82,7 @@ export const editTask = async (taskId,task) => {
     }
 }
 
+// ---> Remove Tasks <--- //
 export const removeTask = async (taskId) => {
     try {
         console.log('hello')
@@ -83,6 +93,7 @@ export const removeTask = async (taskId) => {
     }
 }
 
+// ---> Add Todo to Tasks <--- //
 export const addToDos = async (formData,taskId) => {
     try {
         const { data } = await userApi.post('/todos',{formData,taskId});
@@ -92,6 +103,7 @@ export const addToDos = async (formData,taskId) => {
     }
 }
 
+// ---> Remove Todo from Tasks <--- //
 export const removeTodos = async (formData) => {
     try {
         const { data } = await userApi.patch('/remove-todo',formData)
@@ -101,6 +113,7 @@ export const removeTodos = async (formData) => {
     }
 }
 
+// ---> CheckBox Management <--- //
 export const checkboxHandle = async (infos) => {
     try {
         const { data } = await userApi.patch('/checkbox',infos)

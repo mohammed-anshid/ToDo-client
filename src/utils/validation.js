@@ -1,3 +1,5 @@
+
+// Signup Form validation //
 export const validateForm = (setErrors,signupData) => { 
     const newErrors = {};
 
@@ -35,7 +37,7 @@ export const validateForm = (setErrors,signupData) => {
     return Object.keys(newErrors).length === 0;
 };
 
-
+// Signin Form Validation //
 export const validateSigninForm = (setErrors,signupData) => {
     const newErrors = {};
 
@@ -60,7 +62,7 @@ export const validateSigninForm = (setErrors,signupData) => {
     return Object.keys(newErrors).length === 0;
 }
 
-
+// Profile Form Validation //
 export const validateProfileForm = (setErrors,formData) => {
   const Errors = []
   if (!formData.name?.trim()) {
@@ -80,6 +82,8 @@ export const validateProfileForm = (setErrors,formData) => {
   return Object.keys(Errors).length === 0;
 }
 
+
+// Password & Security Form Validation //
 export const validateSecurityForm = (setErrors,formData) => { 
   const Errors = {};
 
